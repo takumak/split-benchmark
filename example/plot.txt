@@ -1,0 +1,16 @@
+set terminal png
+set output 'bench.png'
+set key left top
+f(x)=a*x+b
+g(x)=c*x+d
+fit f(x) 'data-c.txt' via a,b
+fit g(x) 'data-rs.txt' via c,d
+t1 = sprintf("%.2fe-3*x+%.2f", a*1e3, b)
+t2 = sprintf("%.2fe-3*x+%.2f", c*1e3, d)
+faster = sprintf("Rust (%.1fx faster)", a/c)
+set label 1 "C" at 6000,12
+set label 2 faster at 6000,4
+show label
+set xrange [0:10000]
+set yrange [0:22]
+plot 'data-c.txt', f(x) t t1, 'data-rs.txt', g(x) t t2
