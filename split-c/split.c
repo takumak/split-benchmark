@@ -34,22 +34,26 @@ static char **split(const char *text, const char delimiter)
 	return vstr;
 }
 
+#define BUFFER_SIZE	((100 << 20) + 1)
+
 int main(int argc, char *argv[])
 {
+	char *buffer;
 	int count;
-	char buffer[(1 << 20) + 1]; /* 1 MiB */
 	char **vstr;
 	int i;
 
 	if (argc < 2) {
-		count = 10000;
+		count = 100;
 	} else {
 		sscanf(argv[1], "%d", &count);
 	}
 
-	i = fread(buffer, sizeof(buffer) - 1, 1, stdin);
+	buffer = malloc(BUFFER_SIZE);
+
+	i = fread(buffer, BUFFER_SIZE - 1, 1, stdin);
 	(void)i;
-	buffer[sizeof(buffer) - 1] = '\0';
+	buffer[BUFFER_SIZE - 1] = '\0';
 
 	for (i = 0; i < count; i++) {
 		int j;
